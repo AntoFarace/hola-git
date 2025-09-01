@@ -3,10 +3,11 @@
 
 # Rutas a los datos (provenientes del repo clonado)
 path_raw  <- here("data", "raw", "penguins_raw.rds")
-path_proc <- here("data", "raw", "penguins.rds")
+path_proc <- here("data", "processed", "penguins.rds")
 
 # Cargar .rds (no requiere paquetes extra)
-penguins_raw  <- read_rds(path_raw)  %>% clean_names()
+penguins_raw  <- read_rds(path_raw)  %>% clean_names() 
+#el clean_names cambia los nombres de las columnas para que sean mas claras !!!
 penguins_proc <- read_rds(path_proc) %>% clean_names()
 
 # Tabla de ejemplo (conteo por especie y isla en la versión procesada)
@@ -16,7 +17,7 @@ tabla_resumen <- penguins_proc %>%
 
 write_csv(
   tabla_resumen,
-  # COMPLETAR: here()
+  here("outputs", "Tables", "tabla_resumen")
 )
 
 # Gráfico de ejemplo (masa corporal vs largo del pico, coloreado por especie)
@@ -24,7 +25,7 @@ g <- ggplot(
   penguins_proc %>% filter(!is.na(bill_length_mm), !is.na(body_mass_g)),
   aes(x = bill_length_mm, y = body_mass_g, color = species)
 ) +
-  geom_point(alpha = 0=.7) +
+  geom_point(alpha = 0.7) +
   labs(
     title = "Penguins (procesados): masa corporal vs. largo del pico",
     x = "Largo del pico (mm)",
@@ -32,7 +33,8 @@ g <- ggplot(
     color = "Especie"
   )
 
-ggsave(
-  # COMPLETAR: filename = here(),
+g
+
+ggsave(here("outputs", "Figures", "pinguinos.png"),
   plot = g, width = 7, height = 4, dpi = 300
 )
